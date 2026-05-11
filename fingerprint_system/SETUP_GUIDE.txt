@@ -1,0 +1,104 @@
+FINGERPRINT SYSTEM SETUP & TROUBLESHOOTING GUIDE
+===============================================
+
+STEP 1: CHECK ARDUINO CONNECTION
+---------------------------------
+1. Connect Arduino Uno to your computer via USB
+2. Open Device Manager (Windows key + X, then search "Device Manager")
+3. Look under "Ports (COM & LPT)" for your Arduino
+4. Note the COM port (example: COM3, COM4, etc.)
+
+STEP 2: COMPILE THE C++ PROGRAM
+--------------------------------
+1. Open Command Prompt in: c:\xampp\htdocs\fingerprint_system\
+
+2. FIRST TIME SETUP - Update the COM port:
+   - Open r305_capture.cpp in a text editor
+   - Find this line: std::vector<std::string> possible_ports = {"COM3", "COM4", ...};
+   - Replace COM3 with YOUR COM port number from Step 1
+   - Example: std::vector<std::string> possible_ports = {"COM5", "COM4", "COM3"};
+
+3. Compile the program:
+   g++ r305_capture.cpp -o r305_capture.exe
+
+   If you get "g++ not found":
+   - Install MinGW: https://www.mingw-w64.org/
+   - Or install Visual Studio Community with C++ tools
+   - Add to your PATH environment variable
+
+STEP 3: UPLOAD ARDUINO CODE
+----------------------------
+1. Open Arduino IDE
+2. Open: R305/R305.ino
+3. Make sure you have Adafruit Fingerprint library installed:
+   - Sketch > Include Library > Manage Libraries
+   - Search for "Adafruit Fingerprint"
+   - Install it
+4. Connect Arduino to USB
+5. Tools > Board > Select "Arduino Uno"
+6. Tools > Port > Select your COM port
+7. Click Upload button
+
+STEP 4: TEST THE FINGERPRINT CAPTURE
+-------------------------------------
+1. Keep Arduino connected
+2. Open Command Prompt
+3. Navigate to: c:\xampp\htdocs\fingerprint_system\
+4. Run: r305_capture.exe
+5. Wait 2-3 seconds
+6. Place your finger on the fingerprint sensor
+7. You should see a number printed (the fingerprint ID)
+8. If successful, the program will exit and show the ID
+
+STEP 5: TEST THE WEB PAGE
+--------------------------
+1. Start XAMPP (Apache and MySQL)
+2. Go to: http://localhost/fingerprint_system/
+3. Login with your credentials
+4. Go to Student Enrollment
+5. Click "Capture from R305"
+6. Place your finger on the sensor
+7. Wait up to 15 seconds
+8. The Fingerprint ID should appear in the text field
+
+TROUBLESHOOTING
+===============
+
+ISSUE: "No detection" or blank fingerprint ID
+SOLUTION:
+- Is the Arduino connected? (Check Device Manager)
+- Is the correct COM port in r305_capture.cpp?
+- Place your finger FIRMLY on the sensor
+- Wait 15 seconds for detection
+- Check Arduino Serial Monitor to see if it detects the fingerprint
+
+ISSUE: r305_capture.exe not found
+SOLUTION:
+- Compile it first: g++ r305_capture.cpp -o r305_capture.exe
+- Make sure you're in the correct directory
+
+ISSUE: g++ command not found
+SOLUTION:
+- Install MinGW from https://www.mingw-w64.org/
+- Add to PATH: C:\Program Files\mingw-w64\...\bin
+- Restart Command Prompt
+
+ISSUE: Arduino code upload fails
+SOLUTION:
+- Make sure Adafruit Fingerprint library is installed
+- Select the correct board (Arduino Uno) and COM port
+- Try a different USB cable or port
+
+MANUAL TESTING
+==============
+To test without the fingerprint sensor:
+- Go to: http://localhost/fingerprint_system/fingerprint_capture.php?test_id=123
+- This will return fingerprint ID 123 for testing
+
+NEXT STEPS
+==========
+1. Compile: g++ r305_capture.cpp -o r305_capture.exe
+2. Upload Arduino code to the board
+3. Test manually: r305_capture.exe
+4. Test web page: Click "Capture from R305" button
+5. Register a student with the detected fingerprint
